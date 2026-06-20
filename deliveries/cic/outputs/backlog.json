@@ -1,0 +1,268 @@
+{
+  "delivery": "cic",
+  "generated_by": "product-owner + developer",
+  "date": "2026-06-20",
+  "epics": [
+    {
+      "id": "E1",
+      "title": "Alertas automáticas de vencimiento",
+      "value_statement": "La Directora de Alianzas y los docentes responsables reciben aviso 30 días antes del vencimiento, eliminando el patrón de expiración silenciosa que es la causa raíz del ~20 % de convenios caducados sin cierre formal.",
+      "priority": 1,
+      "priority_justification": "Es el desencadenante de todo el ciclo de cierre: sin alerta temprana, ningún docente inicia el Acta de Finiquito a tiempo, y el riesgo legal documentado en Fundador.md persiste.",
+      "origin": {
+        "mvp_canvas_items": [
+          "Funcionalidad mínima 1 — Motor de alertas automáticas (notificación a docente y contraparte 30 días antes del vencimiento)"
+        ],
+        "requisitos": ["R-01", "R-03"],
+        "user_stories": ["US-01"]
+      }
+    },
+    {
+      "id": "E2",
+      "title": "Cierre formal digital del convenio",
+      "value_statement": "La Directora y los docentes completan el cierre de un convenio vencido íntegramente dentro del sistema — Acta de Finiquito prellenada, informe técnico autogenerado y firma electrónica — sin redactar en Word ni perseguir firmas físicas; los convenios que antes cerraban de palabra ahora dejan evidencia digital ante la contraloría.",
+      "priority": 2,
+      "priority_justification": "Resuelve el riesgo legal central del MVP (≥ 80 % de convenios con Acta firmada en 30 días) y es el outcome que justifica todo el proyecto; se prioriza segunda porque depende de que E1 active el proceso.",
+      "origin": {
+        "mvp_canvas_items": [
+          "Funcionalidad mínima 2 — Módulo de cierre digital (Acta de Finiquito prellenada + flujo de firma electrónica)",
+          "Funcionalidad mínima 3 — Generación automática del informe técnico de alumnos",
+          "Funcionalidad mínima 4 — Panel del docente (vista filtrada de sus convenios)"
+        ],
+        "requisitos": ["R-02", "R-04", "R-05"],
+        "user_stories": ["US-02", "US-03", "US-04"]
+      }
+    },
+    {
+      "id": "E3",
+      "title": "Estado confiable de convenios para estudiantes",
+      "value_statement": "El estudiante que consulta el SIC ve el estado real de cada convenio mediante un semáforo verde/ámbar/rojo y no pierde tiempo ni dinero postulando a alianzas que ya caducaron; los datos de cierre producidos por E1 y E2 se convierten en información accionable para el usuario final.",
+      "priority": 3,
+      "priority_justification": "El semáforo solo tiene datos correctos cuando E1 y E2 funcionan; su valor es real y documentado en alumno.md, pero llega en tercer lugar porque es dependiente de las épicas anteriores.",
+      "origin": {
+        "mvp_canvas_items": [
+          "Funcionalidad mínima 5 — Indicador de estado en tiempo real (semáforo verde/ámbar/rojo) visible para estudiantes"
+        ],
+        "requisitos": ["R-07", "R-08", "R-12"],
+        "user_stories": ["US-05"]
+      }
+    }
+  ],
+  "stories": [
+    {
+      "id": "HU-E1-01",
+      "epic": "E1",
+      "title": "Notificación automática de vencimiento a la directora",
+      "as_a": "fundadora / directora de alianzas",
+      "want": "recibir una notificación automática 30 días antes del vencimiento de cada convenio",
+      "so_that": "pueda activar el proceso de cierre antes de que el convenio caduque de facto y genere riesgo legal",
+      "acceptance_criteria": [
+        "Dado un convenio cuya fecha de vencimiento es en 30 días o menos, cuando el sistema ejecuta la revisión diaria de fechas, entonces envía un correo a la directora de alianzas con el nombre del convenio, la contraparte y la fecha exacta de vencimiento.",
+        "Dado que la directora accede al panel de dirección, cuando lo abre, entonces ve una sección 'Próximos vencimientos' con todos los convenios con vencimiento en ≤ 30 días, ordenados de más urgente a menos urgente.",
+        "Dado un convenio que ya generó alerta ese día, cuando el sistema ejecuta la revisión al día siguiente, entonces no envía una segunda alerta duplicada por el mismo convenio en el mismo ciclo de 24 horas."
+      ],
+      "estimate": 3,
+      "dependencies": [],
+      "open_questions": [],
+      "priority": 1,
+      "origin": ["US-01", "R-01"],
+      "status": "ready"
+    },
+    {
+      "id": "HU-E1-02",
+      "epic": "E1",
+      "title": "Panel de próximos vencimientos en la dirección",
+      "as_a": "fundadora / directora de alianzas",
+      "want": "ver en mi panel una sección Próximos vencimientos ordenada por urgencia",
+      "so_that": "conozca de un vistazo cuáles convenios requieren atención inmediata sin revisar registro por registro",
+      "acceptance_criteria": [
+        "Dado que la directora accede al panel, cuando lo carga, entonces ve la sección 'Próximos vencimientos' con todos los convenios con vencimiento en ≤ 30 días ordenados por fecha de vencimiento ascendente.",
+        "Dado que no hay convenios próximos a vencer, cuando la directora abre el panel, entonces la sección muestra el mensaje 'Sin vencimientos próximos en los próximos 30 días'."
+      ],
+      "estimate": 2,
+      "dependencies": ["HU-E1-01"],
+      "open_questions": [],
+      "priority": 2,
+      "origin": ["US-01", "R-03"],
+      "status": "ready"
+    },
+    {
+      "id": "HU-E1-03",
+      "epic": "E1",
+      "title": "Notificación automática de vencimiento al docente responsable",
+      "as_a": "profesor gestor de convenios",
+      "want": "recibir una alerta de vencimiento con 30 días de anticipación para los convenios bajo mi responsabilidad",
+      "so_that": "pueda preparar el informe técnico de cierre con tiempo suficiente sin depender de que alguien me avise manualmente",
+      "acceptance_criteria": [
+        "Dado un convenio cuya fecha de vencimiento es en 30 días o menos, cuando el sistema ejecuta la revisión diaria, entonces envía un correo al docente responsable del convenio con el nombre del convenio y la fecha exacta de vencimiento.",
+        "Dado que el docente responsable recibe la alerta y accede a su panel, cuando ve el convenio en la lista, entonces aparece marcado con indicador de urgencia (rojo si vence en ≤ 7 días, ámbar si vence en ≤ 30 días)."
+      ],
+      "estimate": 2,
+      "dependencies": ["HU-E1-01"],
+      "open_questions": [],
+      "priority": 3,
+      "origin": ["US-01", "R-01"],
+      "status": "ready"
+    },
+    {
+      "id": "HU-E2-04",
+      "epic": "E2",
+      "title": "Panel de convenios propios del docente",
+      "as_a": "profesor gestor de convenios",
+      "want": "acceder a un panel que liste únicamente los convenios bajo mi responsabilidad con su estado actual y acceso directo al flujo de cierre",
+      "so_that": "no dependa de búsquedas manuales en toda la base y pueda actuar rápido cuando un convenio requiere atención",
+      "acceptance_criteria": [
+        "Dado que el docente inicia sesión, cuando accede a su panel, entonces ve únicamente los convenios asignados a su usuario — no los de otros docentes — con estado, fecha de vencimiento y botón de acceso al flujo de cierre.",
+        "Dado un convenio próximo a vencer en el panel del docente, cuando aparece en la lista, entonces muestra un indicador visual de urgencia (ámbar si vence en ≤ 30 días, rojo si vence en ≤ 7 días).",
+        "Dado que el docente filtra la lista por estado 'En cierre', cuando aplica el filtro, entonces ve únicamente los convenios con proceso de cierre formal activo."
+      ],
+      "estimate": 3,
+      "dependencies": [],
+      "open_questions": [],
+      "priority": 4,
+      "origin": ["US-04", "R-05"],
+      "status": "ready"
+    },
+    {
+      "id": "HU-E2-01",
+      "epic": "E2",
+      "title": "Generación del Acta de Finiquito prellenada",
+      "as_a": "fundadora / directora de alianzas",
+      "want": "que el sistema genere automáticamente el Acta de Finiquito prellenada con los datos del convenio",
+      "so_that": "elimine la redacción manual y quede evidencia digital del cierre disponible para la contraloría",
+      "acceptance_criteria": [
+        "Dado un convenio en estado 'vencido' o 'en cierre', cuando la directora inicia el proceso de cierre desde el panel, entonces el sistema genera un Acta de Finiquito en PDF prellenada con los datos del convenio (nombre de las partes, fechas de inicio y fin, objeto del convenio).",
+        "Dado el Acta de Finiquito generada, cuando la directora la descarga, entonces el PDF contiene todos los campos del registro del convenio correctamente mapeados y está lista para revisión antes de la firma.",
+        "Dado un convenio con campos nulos o incompletos en el registro, cuando el sistema intenta generar el Acta, entonces muestra un aviso enumerando los campos faltantes antes de generar el documento."
+      ],
+      "estimate": 5,
+      "dependencies": ["HU-E2-04"],
+      "open_questions": [],
+      "priority": 5,
+      "origin": ["US-02", "R-02"],
+      "status": "ready"
+    },
+    {
+      "id": "HU-E2-02",
+      "epic": "E2",
+      "title": "Firma electrónica del Acta de Finiquito",
+      "as_a": "fundadora / directora de alianzas",
+      "want": "que todas las partes puedan firmar el Acta de Finiquito electrónicamente dentro del sistema",
+      "so_that": "el convenio quede cerrado formalmente sin requerir documentos físicos ni perseguir firmas presenciales",
+      "acceptance_criteria": [
+        "Dado un Acta de Finiquito generada y revisada, cuando la directora inicia el flujo de firma, entonces el sistema envía un enlace de firma electrónica a cada parte requerida (directora + contraparte) con vigencia de 15 días calendario.",
+        "Dado que todas las partes han firmado el Acta, cuando se registra la última firma, entonces el sistema cambia el estado del convenio a 'Cerrado formalmente' y archiva el Acta firmada en el registro del convenio.",
+        "Dado que un enlace de firma ha expirado sin que la parte firme, cuando el sistema detecta la expiración, entonces notifica a la directora para que reenvíe el enlace o escale el caso."
+      ],
+      "estimate": 8,
+      "dependencies": ["HU-E2-01"],
+      "open_questions": [],
+      "priority": 6,
+      "origin": ["US-02", "R-02"],
+      "status": "ready"
+    },
+    {
+      "id": "HU-E2-03",
+      "epic": "E2",
+      "title": "Generación automática del informe técnico de alumnos",
+      "as_a": "profesor gestor de convenios",
+      "want": "que el sistema extraiga automáticamente los datos de los alumnos participantes y genere el borrador del informe técnico de cierre editable",
+      "so_that": "no tenga que redactarlo desde cero en Word y pueda adjuntarlo directamente al flujo del Acta de Finiquito",
+      "acceptance_criteria": [
+        "Dado un convenio con alumnos vinculados en el sistema, cuando el docente solicita el informe de cierre desde su panel, entonces el sistema genera un borrador del informe técnico prellenado con nombre, carrera y período de participación de cada alumno.",
+        "Dado el borrador generado, cuando el docente lo revisa y edita, entonces puede modificar el contenido de los campos antes de adjuntarlo al Acta de Finiquito.",
+        "Dado un convenio cuyos registros de alumnos tienen campos incompletos, cuando el sistema genera el borrador, entonces marca los campos faltantes con '[PENDIENTE]' y muestra un aviso al docente antes de continuar."
+      ],
+      "estimate": 5,
+      "dependencies": ["HU-E2-04"],
+      "open_questions": [],
+      "priority": 7,
+      "origin": ["US-03", "R-04"],
+      "status": "ready"
+    },
+    {
+      "id": "HU-E3-01",
+      "epic": "E3",
+      "title": "Semáforo visual de estado por convenio",
+      "as_a": "estudiante",
+      "want": "ver un indicador tipo semáforo en el listado de convenios que refleje el estado real de cada uno",
+      "so_that": "identifique de un vistazo cuáles están activos sin necesidad de abrir cada registro individualmente",
+      "acceptance_criteria": [
+        "Dado un convenio cuya fecha de vencimiento ya pasó y no tiene Acta de Finiquito firmada, cuando un estudiante consulta el listado, entonces el convenio muestra el indicador rojo ('Caducado').",
+        "Dado un convenio activo con cupos disponibles, cuando un estudiante consulta el listado, entonces el convenio muestra el indicador verde ('Activo') con el número de cupos disponibles.",
+        "Dado un convenio en proceso de renovación, cuando un estudiante lo consulta en el listado, entonces el convenio muestra el indicador ámbar ('En renovación')."
+      ],
+      "estimate": 3,
+      "dependencies": ["HU-E1-01", "HU-E2-02"],
+      "open_questions": [],
+      "priority": 8,
+      "origin": ["US-05", "R-08"],
+      "status": "ready"
+    },
+    {
+      "id": "HU-E3-02",
+      "epic": "E3",
+      "title": "Bloqueo de postulación a convenios caducados",
+      "as_a": "estudiante",
+      "want": "que el sistema bloquee mis postulaciones a convenios marcados como Caducado",
+      "so_that": "no invierta tiempo en gestiones que el propio sistema ya sabe que son inválidas por haber expirado sin cierre formal",
+      "acceptance_criteria": [
+        "Dado un convenio con indicador rojo ('Caducado'), cuando el estudiante intenta iniciar una postulación, entonces el sistema muestra el mensaje 'Este convenio está caducado; no se aceptan nuevas postulaciones' y no permite completar el formulario.",
+        "Dado un convenio con indicador verde ('Activo') y cupos disponibles, cuando el estudiante inicia una postulación, entonces el sistema permite continuar el proceso normalmente.",
+        "Dado un convenio que cambia de estado 'Activo' a 'Caducado' mientras un estudiante tiene el formulario de postulación abierto, cuando el estudiante intenta enviar el formulario, entonces el sistema rechaza la postulación e informa al estudiante del cambio de estado."
+      ],
+      "estimate": 2,
+      "dependencies": ["HU-E3-01"],
+      "open_questions": [],
+      "priority": 9,
+      "origin": ["US-05", "R-07"],
+      "status": "ready"
+    }
+  ],
+  "deferred": [
+    {
+      "id": "D1",
+      "title": "Postulación digital con CV en PDF",
+      "reason": "Dolor real del estudiante pero no genera riesgo legal; el estado confiable (semáforo) resuelve el dolor más agudo primero. Explícitamente fuera de alcance en el MVP Canvas.",
+      "origin": "US-06-DIFERIDA"
+    },
+    {
+      "id": "D2",
+      "title": "Buscador de convenios con filtros por carrera",
+      "reason": "El semáforo resuelve el problema de datos falsos; el filtro mejora la usabilidad pero no elimina el riesgo legal que justifica el MVP. Explícitamente fuera de alcance en el MVP Canvas.",
+      "origin": "US-07-DIFERIDA"
+    },
+    {
+      "id": "D3",
+      "title": "Registro de adendas sin perder historial",
+      "reason": "Dolor documentado del profesor (R-06, Profesor.md), pero el flujo de cierre formal es la prioridad de la dirección en este MVP. Explícitamente fuera de alcance en el MVP Canvas.",
+      "origin": "US-08-DIFERIDA"
+    },
+    {
+      "id": "D4",
+      "title": "Rediseño completo de la interfaz de usuario",
+      "reason": "Mencionado en alumno.md como dolor (interfaz no amigable), pero diferido explícitamente en el MVP Canvas; la UX puede mejorar en paralelo sin bloquear el núcleo de cierre de convenios.",
+      "origin": "personas.md (Estudiante E., dolor: interfaz-no-amigable)"
+    }
+  ],
+  "open_questions": [
+    {
+      "id": "OQ-01",
+      "question": "¿La firma electrónica es legalmente aceptada por la contraloría institucional?",
+      "impact": "Si no lo es, el módulo de cierre digital (E2) no tiene valor jurídico y el MVP debe rediseñarse para incluir un flujo híbrido digital-físico.",
+      "source": "mvp-canvas.md — Riesgos / supuestos, supuesto crítico 1"
+    },
+    {
+      "id": "OQ-02",
+      "question": "¿Las contrapartes externas (empresas aliadas) cuentan con herramientas para firmar electrónicamente?",
+      "impact": "Si no las tienen, el flujo de firma electrónica del Acta requiere una alternativa para partes externas que aún no está definida en el discovery.",
+      "source": "mvp-canvas.md — Riesgos / supuestos, supuesto crítico 3"
+    },
+    {
+      "id": "OQ-03",
+      "question": "¿Los datos de alumnos en el SIC v1 son suficientemente completos para precargar el informe técnico automático (HU-E2-03)?",
+      "impact": "Si los registros están incompletos, la generación automática no funciona plenamente; HU-E2-03 maneja el caso con campos '[PENDIENTE]', pero la calidad del borrador dependerá de la integridad del SIC v1.",
+      "source": "mvp-canvas.md — Riesgos / supuestos, supuesto crítico 4"
+    }
+  ]
+}

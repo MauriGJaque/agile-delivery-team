@@ -1,0 +1,16 @@
+{
+  "personas": [
+    { "name": "Ing. F. (fundadora)", "role": "fundadora", "primary": true },
+    { "name": "Ing. P. (profesor)", "role": "profesor", "primary": true },
+    { "name": "Estudiante E. (estudiante)", "role": "estudiante", "primary": true }
+  ],
+  "pains": [
+    { "id": "convenios-vencidos-sin-cierre",   "source": "Fundador.md", "persona": "Ing. F. (fundadora)" },
+    { "id": "sin-alertas-vencimiento",          "source": "Fundador.md", "persona": "Ing. F. (fundadora)" },
+    { "id": "cierre-manual-papeleo",            "source": "Profesor.md", "persona": "Ing. P. (profesor)" },
+    { "id": "sin-adendas-modificaciones",       "source": "Profesor.md", "persona": "Ing. P. (profesor)" },
+    { "id": "datos-convenios-desactualizados",  "source": "alumno.md",   "persona": "Estudiante E. (estudiante)" },
+    { "id": "interfaz-no-amigable",             "source": "alumno.md",   "persona": "Estudiante E. (estudiante)" },
+    { "id": "postulacion-fisica-sin-digital",   "source": "alumno.md",   "persona": "Estudiante E. (estudiante)" }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "delivery": "cic",
+  "generated_by": "scrum-master",
+  "date": "2026-06-20",
+  "sprint_goal": "Activar el ciclo de alerta y preparar el borrador del cierre: al terminar el sprint, la directora y los docentes reciben avisos automáticos de vencimiento, y pueden generar desde el sistema el Acta de Finiquito prellenada y el informe técnico de alumnos sin redactar desde cero.",
+  "capacity": 20,
+  "committed": 20,
+  "stories": [
+    "HU-E1-01",
+    "HU-E1-02",
+    "HU-E1-03",
+    "HU-E2-04",
+    "HU-E2-01",
+    "HU-E2-03"
+  ],
+  "sprint2": {
+    "sprint_goal": "Cerrar el ciclo completo: al terminar el sprint, un convenio puede cerrarse formalmente con firma electrónica de todas las partes, y el estudiante ve el estado real en tiempo real.",
+    "capacity": 20,
+    "committed": 13,
+    "buffer_pts": 7,
+    "buffer_reason": "Reservado para integración con proveedor de firma electrónica (OQ-01/OQ-02) o historias diferidas si el equipo lo decide en la Sprint Planning.",
+    "stories": ["HU-E2-02", "HU-E3-01", "HU-E3-02"]
+  },
+  "impediments": [
+    {
+      "id": "IMP-01",
+      "description": "OQ-01: validez legal de firma electrónica ante la contraloría institucional",
+      "owner": "Product Owner → Área Legal",
+      "affects_sprint": 2,
+      "affects_story": "HU-E2-02"
+    },
+    {
+      "id": "IMP-02",
+      "description": "OQ-02: capacidad de contrapartes externas para firmar digitalmente",
+      "owner": "Product Owner → Directora",
+      "affects_sprint": 2,
+      "affects_story": "HU-E2-02"
+    },
+    {
+      "id": "IMP-03",
+      "description": "OQ-03: completitud de datos de alumnos en SIC v1 para el prellenado del informe técnico",
+      "owner": "Developer → auditoría previa al Sprint 1",
+      "affects_sprint": 1,
+      "affects_story": "HU-E2-03"
+    }
+  ],
+  "deferred": ["D1", "D2", "D3", "D4"]
+}
